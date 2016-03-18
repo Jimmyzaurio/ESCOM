@@ -17,7 +17,7 @@ void warning (char *s, char *t);
 %token <c> NUMERO
 %type <c> conj exp
 
-%%
+%% 
 lista: 
 	 | lista'\n'
 	 | lista exp '\n' { imprimeConjunto($2); }
