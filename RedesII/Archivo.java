@@ -1,11 +1,9 @@
 import java.io.*;
 import java.util.*;
 
-public class Archivo {
-	String nombre;
-	
+public class Archivo {	
 	ArrayList<Jugador> leeMarcador() {
-		ArrayList<Jugador> lista = new ArrayList();
+		ArrayList<Jugador> lista = new ArrayList<Jugador>();
 		try {
 			File f = new File("puntuacion.in");
 			if (f.createNewFile()) // Crea el archivo si no existe y retorna true
@@ -40,5 +38,28 @@ public class Archivo {
 			return false;
 		}
 		return true;
+	}
+
+	String[] leeLista() {
+		ArrayList<String> temp = new ArrayList<String>();
+		String[] lista = null;
+		try {
+			File fin = new File("lista.txt");
+			FileInputStream fis = new FileInputStream(fin);
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				temp.add(line);
+			}
+			lista = new String[temp.size()];
+			lista = temp.toArray(lista);
+			return lista;
+		} catch(Exception ex) {
+			System.out.println("Algo salio mal en leeLista");
+			//ex.printStackTrace();
+			return lista;
+		}
 	}
 }
