@@ -11,12 +11,17 @@ public class Tablero implements Serializable{
 	final int DIAG45 = 2;
 	final int DIAG135 = 3;
 	char[][] matriz;
+	int ayuda;
 	boolean es_ganador;
-	Set<String> P;
+	ArrayList<String> sopa;
+	ArrayList<String> respuesta;
 
 	public Tablero() {
 		Palabra pal = new Palabra();
-		P = pal.damePalabras();
+		Set<String> aux = pal.damePalabras();
+		respuesta = new ArrayList<String>();
+		sopa = new ArrayList<String>();
+		ayuda = 0;
 
 		matriz = new char[TAM][TAM];
 		for (int i = 0; i < TAM; i++)
@@ -24,7 +29,7 @@ public class Tablero implements Serializable{
 				matriz[i][j] = '#';
 		
 		int pos = 1;	
-		for (String s : P) {
+		for (String s : aux) {
 			boolean colocada = false;
 			pos = (pos+1)%4;
 			switch (pos) {
@@ -83,7 +88,7 @@ public class Tablero implements Serializable{
 				break;
 
 				case DIAG45:
-					for (int i = TAM; i >= s.length() - 1 && !colocada; --i) {
+					for (int i = TAM - 1; i >= s.length() - 1 && !colocada; --i) {
 						for (int j = 0; j < TAM - s.length() && !colocada; ++j) {
 							if (matriz[i][j] == '#' || matriz[i][j] == s.charAt(0)) {
 								boolean flag = true;										
@@ -99,13 +104,24 @@ public class Tablero implements Serializable{
 						}
 					}
 				break;
-			}			
+			}	
+			if (colocada) respuesta.add(s);
 		}		
+
+		for (String s : respuesta) {
+			char[] temp = s.toCharArray();
+			Arrays.sort(temp);
+			sopa.add(new String(temp));
+		}
 
 		Random ra = new Random();
 		for (int i = 0; i < TAM; i++)
 			for (int j = 0; j < TAM; j++)
 				if (matriz[i][j] == '#')
 					matriz[i][j] = (char)(ra.nextInt(26) + 'A');		
+	}
+
+	public void setAyuda(int n) {
+		ayuda += n;
 	}
 }
