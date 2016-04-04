@@ -63,7 +63,7 @@ public class Servidor {
 				cl.close();
 			} // for recibir cliente
 		} catch(Exception ex) {
-		
+		//
 		}
 	}
 }
