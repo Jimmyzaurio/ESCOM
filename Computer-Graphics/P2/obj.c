@@ -48,7 +48,7 @@ int main() {
 	}
 
 	Node* data = NULL;
-	rewind(fp);
+	rewind(fp); //Sets the position indicator associated with stream to the beginning of the file.
 	while (fgets(buf, sizeof buf, fp) != NULL) {
 		if (buf[0] == 'v' && buf[1] != 't') { // valid information
 			fscanf(fp, "%s %lf %lf %lf", cad, &x, &y, &z);
