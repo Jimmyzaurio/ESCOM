@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Servidor {
 	public static void main(String args[]) {
-		final int PUERTO = 7000;		
+		final int PUERTO = 7000;
 		try {			
 			ServerSocket server = new ServerSocket(PUERTO);
 			System.out.println("Servidor iniciado, esperando jugadores.");
