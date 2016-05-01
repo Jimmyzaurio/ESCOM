@@ -111,7 +111,6 @@ int yylex (){
 		}
 	}
   	if (c == '\n') {
-		//puts("enter");
 		lineno++;
 	}
 	/*if( c== '(')
