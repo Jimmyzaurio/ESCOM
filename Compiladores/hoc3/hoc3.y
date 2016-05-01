@@ -41,10 +41,10 @@ expr:      NUMBER { $$ = $1;  }
 		$$=$1->u.val;
 	      }
 	| BLTIN  '(' expr ')' { $$=(*($1->u.ptr))($3);}
-    | expr '+' expr     { $$ = $1+$3;  }
-    | expr '-' expr     { $$ = $1-$3;  }
-    | expr '*' expr     { $$ = $1*$3;  }
-    | expr '/' expr     { 
+	| expr '+' expr     { $$ = $1+$3;  }
+	| expr '-' expr     { $$ = $1-$3;  }
+	| expr '*' expr     { $$ = $1*$3;  }
+	| expr '/' expr     { 
 		if($3==0.0)
 			execerror("division por cero", "");
 		$$ = $1/$3; }
