@@ -32,14 +32,14 @@ lista:
 
 exp:  NUMBER           { $$ = *new Complejo($1,0);  }
 	| VAL 			   { $$ = mem[$1];}
-	| VAL '='	exp	   { $$ = mem[$1] = $3;}
-	| exp 'i'         { $$ = $1*(*new Complejo(0,1));  }
-    | exp '+' exp     { $$ = $1+$3;  }
-    | exp '-' exp     { $$ = $1-$3;  }
-    | exp '*' exp     { $$ = $1*$3;  }
-    | exp '/' exp     { $$ = $1/$3; }	
-    | '-' exp 	%prec UNARYMINUS { $$ = *new Complejo()-$2;}
-    | '(' exp ')'     { $$ = $2;}
+	| VAL '=' exp  { $$ = mem[$1] = $3;}
+	| exp 'i'      { $$ = $1*(*new Complejo(0,1));  }
+	| exp '+' exp  { $$ = $1+$3;  }
+	| exp '-' exp  { $$ = $1-$3;  }
+	| exp '*' exp  { $$ = $1*$3;  }
+	| exp '/' exp  { $$ = $1/$3; }	
+	| '-' exp 	%prec UNARYMINUS { $$ = *new Complejo()-$2;}
+	| '(' exp ')'  { $$ = $2;}
 	;
 %%
 
