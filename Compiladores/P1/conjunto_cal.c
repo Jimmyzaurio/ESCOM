@@ -8,6 +8,7 @@ Conjunto *creaConjunto(int tama) {
     conj->eltos = (tTipo *)malloc(sizeof(tTipo)*tama);
     return conj;
 }
+
 Conjunto *copiaConjunto(Conjunto *conj) {
    int i;
    Conjunto *copy=creaConjunto(conj->cardinal);
@@ -16,24 +17,28 @@ Conjunto *copiaConjunto(Conjunto *conj) {
    copy->cardinal=conj->cardinal;	
    return copy;	
 }
+
 void imprimeConjunto(Conjunto *conj) {
    int i; 
    for(i=0; i< conj->cardinal ; i++)
       printf("%d ", conj->eltos[i]);
    printf("\n");
 }
+
 int pertenece(Conjunto *A, tTipo x){
   int i;
   for (i = 0; i < A->cardinal; i++)
     if (A->eltos[i] == x) return 1;
   return 0;
 }
+
 Conjunto *insertar(Conjunto *A, tTipo x){
   if (!pertenece(A, x))
     A->eltos[A->cardinal++] = x;
   //printf("card= (%d) \n", A->cardinal);
   return A;
 }
+
 Conjunto *borrar(Conjunto *A, tTipo x){
   int i;
   for (i = 0; i < A->cardinal; i++)
@@ -42,6 +47,7 @@ Conjunto *borrar(Conjunto *A, tTipo x){
     }
   return A;
 }
+
 Conjunto *unirConjunto(Conjunto *A, Conjunto *B){
   Conjunto *nvo;
   int i;
@@ -54,6 +60,7 @@ Conjunto *unirConjunto(Conjunto *A, Conjunto *B){
       insertar(nvo, B->eltos[i]);
   return nvo;
 }
+
 Conjunto *intersecConjunto(Conjunto *A, Conjunto *B){
   Conjunto *nvo;
   int i;
@@ -64,6 +71,7 @@ Conjunto *intersecConjunto(Conjunto *A, Conjunto *B){
       insertar(nvo, A->eltos[i]);
   return nvo;
 }
+
 Conjunto *diferenConjunto(Conjunto *A, Conjunto *B){
    Conjunto *nvo;
    int i;
@@ -74,6 +82,7 @@ Conjunto *diferenConjunto(Conjunto *A, Conjunto *B){
          insertar(nvo, A->eltos[i]);
    return nvo;
 }
+
 Conjunto *difsimConjunto(Conjunto *A, Conjunto *B){
   Conjunto *nvo;
   int i;
@@ -87,6 +96,7 @@ Conjunto *difsimConjunto(Conjunto *A, Conjunto *B){
       insertar(nvo, B->eltos[i]); 
   return nvo; 
 }
+
 int subconjunto(Conjunto *A, Conjunto *B) {
    int i, esta;
    esta = 1;
@@ -94,6 +104,7 @@ int subconjunto(Conjunto *A, Conjunto *B) {
       if (!pertenece(B, A->eltos[i])) return 0;
    return 1;
 }
+
 int iguales(Conjunto *A, Conjunto *B){
   return (subconjunto(A,B) && A->cardinal == B->cardinal);
 }
