@@ -19,4 +19,4 @@ Conjunto *diferenConjunto(Conjunto *A, Conjunto *B);
 Conjunto *difsimConjunto(Conjunto *A, Conjunto *B);
 int subconjunto(Conjunto *A, Conjunto *B);
 int iguales(Conjunto *A, Conjunto *B);
- 
+void imprimeConjunto(Conjunto *conj);
