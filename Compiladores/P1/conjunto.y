@@ -1,4 +1,5 @@
 %{
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -14,7 +15,7 @@ void warning (char *s, char *t);
 	int n;
 	Conjunto* c;
 }
-%token <c> NUMERO
+%token <n> NUMERO
 %type <c> conj exp
 
 %% 
@@ -37,6 +38,7 @@ conj: conj ',' NUMERO { $$ = insertar($$, $3); }
 
 char *progname;
 int lineno = 1;
+using namespace std;
 
 int main (int argc, char *argv[]) {
 	progname = argv[0];
