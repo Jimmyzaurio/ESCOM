@@ -1,4 +1,4 @@
-Calculadora de complejos con C++
+#Calculadora de complejos con C++
 
 Recordemos que y.tab.h se genera apartir del comando
   byacc -d maquina.y
