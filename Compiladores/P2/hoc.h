@@ -14,3 +14,10 @@ typedef struct Symbol { /* entrada de la tabla de símbolos */
 } Symbol;
 
 Symbol *install(string s,int t, Complejo d), *lookup(string s);
+
+void yyerror (string s);
+int yylex ();
+void warning(string s, string t);
+void execerror(string s, string t);
+void fpecatch();
+string array_to_string(char *s);

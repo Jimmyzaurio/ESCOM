@@ -7,13 +7,6 @@
 #include <stdio.h>
 #define MSDOS
 using namespace std;
-
-void yyerror (string s);
-int yylex ();
-void warning(string s, string t);
-void execerror(string s, string t);
-void fpecatch();
-string array_to_string(char *s);
 %}
 
 %union {
@@ -30,7 +23,6 @@ string array_to_string(char *s);
 %left '+' '-'
 %left '*' '/' 'i'
 %left UNARYMINUS
-%right '^'
 %% /* A continuación las reglas gramaticales y las acciones */
 list:
 	| list '\n'
@@ -42,7 +34,7 @@ asgn:	VAR '=' expr { $$ = $1->val = $3; $1->type = VAR;}
 	;
 expr: NUMBER { $$ = *new Complejo($1, 0);  }
 	| VAR { 
-		if($1->type == INDEF) execerror("variable no definida ", $1->name.c_str());
+		if($1->type == INDEF) execerror("Variable no definida ", $1->name.c_str());
 		$$ = $1->val;
 	      }
 	| expr 'i'			{ $$ = $1*(*new Complejo(0,1));  }
