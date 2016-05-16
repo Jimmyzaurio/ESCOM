@@ -83,21 +83,18 @@ int yylex (){
     }
 	if (isalpha(c) && c != 'i') {
 		Symbol *s;
-		char sbuf[200], *p = sbuf;
-		do {
-			*p++ = c;
-		} while ((c = getchar()) != EOF && isalnum(c));
-		ungetc(c, stdin);
-		*p = '\0';
 
-		if ((s = lookup(sbuf)) == (Symbol *)NULL)
-			s = install(sbuf, INDEF, *new Complejo(0.0, 0.0));
+		string cad;
+		do {
+			cad += c;
+		} while ((c = getchar()) != EOF && isalnum(c));		
+		ungetc(c, stdin);
+
+		if ((s = lookup(cad)) == (Symbol *)NULL)
+			s = install(cad, INDEF, *new Complejo(0.0, 0.0));
 		yylval.sym = s;   
-		if (s->type == INDEF) {
-			return VAR;
-		} else {
-			return s->type;
-		}
+
+		return s->type == INDEF? VAR: s->type;		
 	}
   	if (c == '\n') {
 		lineno++;

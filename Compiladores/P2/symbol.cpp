@@ -4,7 +4,7 @@ using namespace std;
 static Symbol *symlist=0;    /* tabla de simbolos: lista ligada */
 
 /* encontrar s en la tabla de símbolos */
-Symbol *lookup(char *s) {
+Symbol *lookup(string s) {
 	Symbol  *sp;
 	string cad(s);
 	//cout << "vamos a buscar " << cad << "\n";
@@ -16,11 +16,10 @@ Symbol *lookup(char *s) {
 }
 
 /* instalar s en la tabla de símbolos */
-Symbol *install(char *s,int t, Complejo d) {
+Symbol *install(string s,int t, Complejo d) {
 	Symbol *sp;
-	sp = (Symbol *) malloc(sizeof(Symbol));	
-	string cad(s);
-	sp->name = cad;
+	sp = (Symbol *) malloc(sizeof(Symbol));		
+	sp->name = s;
 	sp->type = t;
 	sp->val = d;
 	sp->next = symlist;   /*  poner al frente de la lista   */
