@@ -40,6 +40,10 @@ Complejo Complejo::operator/(Complejo z){
 	double O = O1 - O2;
 	return *new Complejo(R*cos(O), R*sin(O));
 }
+
 void Complejo::imprime(){
-	cout << rl << " + "<< im <<"i"<<endl;
+	cout << rl;
+	if (im >= 0) cout << " + " << im;
+	else	cout << " - " << -im;
+	cout << "i \n";	
 }
