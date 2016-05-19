@@ -1,79 +1,115 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <iostream>
+#include "hoc.h"
 #include "complejo.h"
+#include <string>
+#include <math.h>
+#include <stdio.h>
 #define MSDOS
-Complejo mem[30];
-void yyerror (char *s);
-int yylex ();
-void warning (char *s, char *t);
+using namespace std;
 %}
 
 %union {
-	int n;
-	char inx;
-	Complejo c = *new Complejo(0,0);
+	double n;
+	Complejo val = *new Complejo(0, 0);
+	Symbol *sym;
 }
 
 %token <n> NUMBER
-%token <inx> VAL
-%type <c> exp
+%token <sym> VAR INDEF
+%type <val> expr asgn
+
 %right '='
 %left '+' '-'
 %left '*' '/' 'i'
 %left UNARYMINUS
-%% 
-lista: 
-	 | lista'\n'
-	 | lista exp '\n' { $2.imprime(); }
-	 ;
-
-exp:  NUMBER           { $$ = *new Complejo($1,0);  }
-	| VAL 			   { $$ = mem[$1];}
-	| VAL '=' exp  { $$ = mem[$1] = $3;}
-	| exp 'i'      { $$ = $1*(*new Complejo(0,1));  }
-	| exp '+' exp  { $$ = $1+$3;  }
-	| exp '-' exp  { $$ = $1-$3;  }
-	| exp '*' exp  { $$ = $1*$3;  }
-	| exp '/' exp  { $$ = $1/$3; }	
-	| '-' exp 	%prec UNARYMINUS { $$ = *new Complejo()-$2;}
-	| '(' exp ')'  { $$ = $2;}
+%% /* A continuación las reglas gramaticales y las acciones */
+list:
+	| list '\n'
+	| list asgn '\n'
+	| list expr '\n'  { $2.imprime(); }
+	| list error '\n' { yyerror("Hubo un problema"); } 
+	;
+asgn:	VAR '=' expr { $$ = $1->val = $3; $1->type = VAR;}
+	;
+expr: NUMBER { $$ = *new Complejo($1, 0);  }
+	| VAR { 
+		if($1->type == INDEF) execerror("Variable no definida ", $1->name.c_str());
+		$$ = $1->val;
+	      }
+	| expr 'i'			{ $$ = $1*(*new Complejo(0,1));  }
+	| expr '+' expr     { $$ = $1 + $3;  }
+	| expr '-' expr     { $$ = $1 - $3;  }
+	| expr '*' expr     { $$ = $1 * $3;  }
+	| expr '/' expr     { $$ = $1/$3;	 }
+	| '(' expr ')'      { $$ = $2; }
+	| '-' expr %prec UNARYMINUS { $$= *new Complejo() - $2; }
 	;
 %%
 
-char *progname;
+#include <stdio.h>
+
+char *aux;
+string progname;
 int lineno = 1;
 
-int main (int argc, char *argv[]) {
-	progname = argv[0];
-	yyparse();
+int main (int argc, char *argv[]){
+	aux = argv[0];
+	progname = array_to_string(aux);
+  	yyparse ();
 }
 
-int yylex() {
-	int c;
-	while ((c = getchar()) == ' ' || c == '\t');
-	if (c == EOF) return 0;
-	if (isdigit(c)) {
+string array_to_string(char *s) {
+	return string(s);
+}
+
+int yylex (){
+  	int c;
+
+  	while ((c = getchar ()) == ' ' || c == '\t');
+ 	if (c == EOF) return 0;
+  	if (c == '.' || isdigit (c)) {
+  		ungetc (c, stdin);
+  		scanf ("%lf", &yylval.n);
+      	return NUMBER;
+    }
+	if (isalpha(c) && c != 'i') {
+		Symbol *s;
+
+		string cad;
+		do {
+			cad += c;
+		} while ((c = getchar()) != EOF && isalnum(c));		
 		ungetc(c, stdin);
-		scanf("%d", &yylval.n);
-		return NUMBER;
-	}
-	if(islower(c) and c != 'i'){
-		yylval.inx = c;
-		return VAL;
-	}
-	if (c == '\n') lineno++;
-	return c;
-}	
 
-void yyerror (char *s) {
-	warning (s, (char *) 0);
+		if ((s = lookup(cad)) == (Symbol *)NULL)
+			s = install(cad, INDEF, *new Complejo(0.0, 0.0));
+		yylval.sym = s;   
+
+		return s->type == INDEF? VAR: s->type;		
+	}
+  	if (c == '\n') {
+		lineno++;
+	}
+  	return c;                                
 }
 
-void warning(char *s, char *t) {
-	fprintf (stderr, "%s: %s", progname, s);
-	if (t)
-		fprintf(stderr, "%s", t);
-	fprintf(stderr, "Cerca de la linea %d \n", lineno);
+void execerror(string s, string t){
+	warning(s, t);
+}
+
+void fpecatch(){
+	execerror("excepcion de punto flotante", (char *)0);
+}
+
+/* Llamada por yyparse ante un error */
+void yyerror (string s) {
+	warning(s, "---");
+}
+
+void warning(string s, string t) {
+	fprintf (stderr, "%s: %s", progname.c_str(), s.c_str());
+	if(t.length() != 0)
+		fprintf (stderr, " %s", t.c_str()); // Lo convertimos a C-array
+	fprintf (stderr, "cerca de la linea %d\n", lineno);
 }
