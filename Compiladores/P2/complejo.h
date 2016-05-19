@@ -2,7 +2,6 @@
 #define COMPLEJO
 
 #include <iostream>
-#include <math.h>
 using namespace std;
 class Complejo{
 	private:
@@ -19,4 +18,5 @@ class Complejo{
 		double getR();
 		double getI();
 };
+
 #endif
