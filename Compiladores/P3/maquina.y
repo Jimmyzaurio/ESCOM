@@ -10,7 +10,8 @@ using namespace std;
 %}
 %union {
 	double n;
-	Complejo val = *new Complejo(0, 0);
+	//Complejo val = *new Complejo(0, 0);
+	Inst *val;
 	Symbol *sym;
 }
 %token <sym> VAR UNDEF NUMBER
