@@ -33,11 +33,12 @@ Datum pop() {
 void xpop(void) {
 	if (stackp == stack)
 		execerror("stack underflow", " ");
+	--stackp;
 }
 
 Inst * code(Inst f) {
 	Inst *oprogp = progp;
-	if(progp >= &prog[NPROG])
+	if (progp >= &prog[NPROG])
 		execerror("programa demasiado grande", nil);	
 	*progp++ = f;
 	return oprogp;
@@ -90,10 +91,10 @@ void whilecode() {
 }
 
 void ifcode() {
-	Datum d;
-	Inst *savepc = pc;
-	cout << "estoy en el if   ";
-    execute(savepc+3);  /* condition */
+	Datum d;	
+	Inst *savepc = pc;				// then part
+	cout << "empieza if\n";
+    execute(savepc+3);  			// condition
     d = pop();
     if (d.val != *new Complejo())
         execute(*((Inst **)(savepc)));
@@ -107,12 +108,13 @@ void ifcode() {
 void print() {
 	Datum d = pop();
 	d.val.imprime();
-	//printf("\t%.8g\n", d.val);
 }
 
 void eval() {
 	Datum d = pop();
-	if(d.sym->type == UNDEF)
+	if (d.sym->type != VAR && d.sym->type != UNDEF)
+		execerror("intento de evaluar una no variable\n", d.sym->name);
+	if (d.sym->type == UNDEF)
 		execerror("variable indefinida", d.sym->name);
 	d.val = d.sym->val;
 	push(d);
@@ -159,13 +161,6 @@ void negar() {
 
 void imag() {
 	Datum d = pop();
-	/*
-	cout << "antes del imaginario :";
-	d.val.imprime();
-	d.val = d.val*(*new Complejo(0, 1));
-	cout << "despues del imaginario :";
-	d.val.imprime();
-	*/
 	d.val = d.val*(*new Complejo(0, 1));
 	push(d);
 }
@@ -184,8 +179,7 @@ void lt() {
     Datum d1, d2;
     d2 = pop();
     d1 = pop();
-    cout << "menor que \n";
-    d1.val = (d1.val < d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d1.val = (d1.val < d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d1);
 }
 
@@ -193,7 +187,7 @@ void ge() {
     Datum d1, d2;
     d2 = pop();
     d1 = pop();
-    d1.val = (d1.val >= d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d1.val = (d1.val >= d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d1);
 }
 
@@ -201,7 +195,7 @@ void le() {
     Datum d1, d2;
     d2 = pop();
     d1 = pop();
-    d1.val = (d1.val <= d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d1.val = (d1.val <= d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d1);
 }
 
@@ -209,7 +203,7 @@ void eq() {
     Datum d1, d2;
     d2 = pop();
     d1 = pop();
-    d1.val = (d1.val == d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d1.val = (d1.val == d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d1);
 }
 
@@ -217,7 +211,7 @@ void ne() {
     Datum d1, d2;
     d2 = pop();
     d1 = pop();
-    d1.val = (d1.val  !=  d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d1.val = (d1.val  !=  d2.val)? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d1);
 }
 
@@ -225,7 +219,7 @@ void _and() {
     Datum d1, d2;
     d2 = pop();
     d1 = pop();
-    d1.val = (d1.val != *new Complejo() && d2.val != *new Complejo())? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d1.val = (d1.val != *new Complejo() && d2.val != *new Complejo())? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d1);
 }
 
@@ -233,14 +227,14 @@ void _or() {
     Datum d1, d2;
     d2 = pop();
     d1 = pop();
-    d1.val = (d1.val != *new Complejo() || d2.val != *new Complejo())? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d1.val = (d1.val != *new Complejo() || d2.val != *new Complejo())? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d1);
 }
 
 void _not() {
     Datum d;
     d = pop();
-    d.val = (d.val == *new Complejo())? *new Complejo(2.0, 2.0): *new Complejo(0, 0);;
+    d.val = (d.val == *new Complejo())? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
     push(d);
 }
 

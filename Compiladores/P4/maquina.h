@@ -23,13 +23,6 @@ typedef struct Datum {
 typedef int (*Inst)();
 #define STOP (Inst)0
 
-/* practica 4
-extern Inst prog[];
-extern Datum pop();
-extern void eval(), add(), sub(), mul(), division(), negar(), imag();
-extern void assign(), varpush(), constpush(), print();
-*/
-
 // Inicio practica 5
 extern Inst prog[], *progp;
 extern Inst *code(Inst f);

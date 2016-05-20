@@ -32,7 +32,7 @@ list: 	/* nada */
 		|	list expr '\n' { code2(print, STOP); return 1; }
 		|	list error '\n' { yyerrok; }
 		;
-asgn:	VAR '=' expr { cout << "asignando\n"; $$ = $3; code3(varpush, (Inst)$1, assign); }
+asgn:	VAR '=' expr { $$ = $3; code3(varpush, (Inst)$1, assign); }
 		;
 stmt:		expr		{ code(xpop); }
 		|	PRINT expr	{ code(prexpr); $$ = $2; }
@@ -45,25 +45,25 @@ stmt:		expr		{ code(xpop); }
 			($1)[3] = (Inst)$4;	}	// fin del if
 		|	if cond stmt end ELSE stmt end	{
 			($1)[1] = (Inst)$3;		// then part
-			($1)[2] = (Inst)$6;		// fin del if
-			($1)[3] = (Inst)$7;		// fin del if
+			($1)[2] = (Inst)$6;		// else part
+			($1)[3] = (Inst)$7;		// end, if cond failsx
 											}
 		|	'{' stmtlist '}'      { $$ = $2; }
 	    ;
-cond:	'(' expr ')'  { cout << "condicion\n"; code(STOP); $$ = $2; }
+cond:	'(' expr ')'  { code(STOP); $$ = $2; }
     	;
 while:	WHILE { $$ = code3(whilecode, STOP, STOP); }
         ;
-if:		IF    { cout << "hay un if\n"; $$ = code(ifcode); code3(STOP, STOP, STOP); }
+if:		IF    { $$ = code(ifcode); code3(STOP, STOP, STOP); }
         ;
-end:      /* nothing */         { code(STOP); $$ = progp; }
+end:      /* nada */         { code(STOP); $$ = progp; }
         ;
-stmtlist: /* nothing */         { $$ = progp; }
+stmtlist: /* nada */         { $$ = progp; }
 	    | stmtlist '\n'
 	    | stmtlist stmt
 	    ;    
-expr:		NUMBER			{ code2(constpush, (Inst)$1); }
-		|	VAR 			{ code3(varpush, (Inst)$1, eval); }
+expr:		NUMBER			{ $$ = code2(constpush, (Inst)$1); }
+		|	VAR 			{ $$ = code3(varpush, (Inst)$1, eval); }
 		|	asgn
 		|	'(' expr ')'	{ $$ = $2; }
 		|	expr '+' expr  	{ code(add);  }
@@ -74,7 +74,7 @@ expr:		NUMBER			{ code2(constpush, (Inst)$1); }
 		|	'-' expr %prec UNARYMINUS { $$ = $2; code(negar); }
         | expr GT expr  { code(gt); }
         | expr GE expr  { code(ge); }
-        | expr LT expr  { cout << "menor que\n"; code(lt); }
+        | expr LT expr  { code(lt); }
         | expr LE expr  { code(le); }
         | expr EQ expr  { code(eq); }
         | expr NE expr  { code(ne); }
@@ -85,7 +85,6 @@ expr:		NUMBER			{ code2(constpush, (Inst)$1); }
 %%
 
 #include <stdio.h>
-//#include "init.cpp" // no estoy seguro
 
 char *aux;
 string progname;
@@ -99,14 +98,11 @@ int yylex() {
 		double d;
 		ungetc(c, stdin);
 		scanf("%lf", &d);
-		//cout << "lei this num  " << d << "\n";
 		yylval.sym = install(" ", NUMBER, *new Complejo(d, 0));
-		//yylval.val = *new Complejo(d, 0);
-		//cout << "hre iam \n";
 		return NUMBER;
 	}
 
-	if (isalpha(c) && c != 'i') {
+	if (isalpha(c)) {
 		Symbol *s;
 
 		string cad;
@@ -114,6 +110,9 @@ int yylex() {
 			cad += c;
 		} while ((c = getchar()) != EOF && isalnum(c));		
 		ungetc(c, stdin);
+
+		if (cad.size() == 1 && cad[0] == 'i')
+			return 'i';
 
 		if ((s = lookup(cad)) == NULL) {
 			s = install(cad, UNDEF, *new Complejo(0, 0));
