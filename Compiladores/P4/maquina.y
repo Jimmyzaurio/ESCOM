@@ -9,14 +9,11 @@
 using namespace std;
 %}
 %union {
-	//double n;
-	//Complejo val = *new Complejo(0, 0);
 	Inst *val;
 	Symbol *sym;
 }
 %token  <sym>   NUMBER PRINT VAR UNDEF WHILE IF ELSE
 %type   <val>  stmt asgn expr stmtlist cond while if end
-
 %right	'='
 %left	OR					//  Asociacion
 %left	AND					//   practica
@@ -61,7 +58,7 @@ end:      /* nada */         { code(STOP); $$ = progp; }
 stmtlist: /* nada */         { $$ = progp; }
 	    | stmtlist '\n'
 	    | stmtlist stmt
-	    ;    
+	    ;
 expr:		NUMBER			{ $$ = code2(constpush, (Inst)$1); }
 		|	VAR 			{ $$ = code3(varpush, (Inst)$1, eval); }
 		|	asgn
@@ -72,15 +69,17 @@ expr:		NUMBER			{ $$ = code2(constpush, (Inst)$1); }
 		|	expr '/' expr  	{ code(division); }
 		|	expr 'i'		{ code(imag); }
 		|	'-' expr %prec UNARYMINUS { $$ = $2; code(negar); }
-        | expr GT expr  { code(gt); }
-        | expr GE expr  { code(ge); }
-        | expr LT expr  { code(lt); }
-        | expr LE expr  { code(le); }
-        | expr EQ expr  { code(eq); }
-        | expr NE expr  { code(ne); }
-        | expr AND expr { code(_and); }
-        | expr OR expr  { code(_or); }
-        | NOT expr      { $$ = $2; code(_not); }
+        | '|' expr '|' GT  '|'expr '|'  { code(gt); }
+        | '|' expr '|' GE  '|'expr '|'  { code(ge); }
+        | '|' expr '|' LT  '|'expr '|'  { code(lt); }
+        | '|' expr '|' LE  '|'expr '|'  { code(le); }
+        |  expr  EQ  expr   { code(eq); }
+        |  expr  NE  expr   { code(ne); }
+        | '|' expr '|' EQ '|' expr '|'  { code(mag_eq); }
+        | '|' expr '|' NE '|' expr '|' 	{ code(mag_ne); }
+        | '|' expr '|' AND '|'expr '|' 	{ code(_and); }
+        | '|' expr '|' OR  '|'expr '|'  { code(_or); }
+        | NOT expr		{ $$ = $2; code(_not); }
 		;
 %%
 

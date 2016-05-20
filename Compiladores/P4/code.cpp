@@ -70,8 +70,6 @@ void varpush() {
 void constpush() {
 	Datum d;
 	d.val = ((Symbol *)*pc++)->val;
-	//cout << "los valores son : ";
-	//d.val.imprime();
 	push(d);
 }
 
@@ -93,7 +91,6 @@ void whilecode() {
 void ifcode() {
 	Datum d;	
 	Inst *savepc = pc;				// then part
-	cout << "empieza if\n";
     execute(savepc+3);  			// condition
     d = pop();
     if (d.val != *new Complejo())
@@ -103,7 +100,7 @@ void ifcode() {
     pc = *((Inst **)(savepc+2));         /* next stmt */
 }
 
-// fin practica 5			****************************
+// fin practica 4			****************************
 
 void print() {
 	Datum d = pop();
@@ -155,7 +152,6 @@ void division() {
 void negar() {
 	Datum d = pop();
 	d.val = *new Complejo() - d.val;
-	cout << "negado \n";
 	push(d);
 }
 
@@ -215,6 +211,22 @@ void ne() {
     push(d1);
 }
 
+void mag_eq() {
+    Datum d1, d2;
+    d2 = pop();
+    d1 = pop();
+    d1.val = (d1.val.mag_eq(d2.val))? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
+    push(d1);
+}
+
+void mag_ne() {
+    Datum d1, d2;
+    d2 = pop();
+    d1 = pop();
+    d1.val = (d1.val.mag_ne(d2.val))? *new Complejo(2.0, 2.0): *new Complejo(0, 0);
+    push(d1);
+}
+
 void _and() {
     Datum d1, d2;
     d2 = pop();
@@ -241,7 +253,6 @@ void _not() {
 void prexpr() {      /* print numeric value */
     Datum d;
     d = pop();
-    //printf("%.8g\n", d.val);
     d.val.imprime();
 }
-// fin practica 5
+// fin practica 4

@@ -23,7 +23,7 @@ typedef struct Datum {
 typedef int (*Inst)();
 #define STOP (Inst)0
 
-// Inicio practica 5
+// Inicio practica 4
 extern Inst prog[], *progp;
 extern Inst *code(Inst f);
 extern Datum pop();
@@ -40,6 +40,8 @@ extern void varpush();
 extern void constpush();
 extern void print();
 extern void prexpr();
+extern void mag_eq();
+extern void mag_ne();
 extern void gt();
 extern void lt();
 extern void eq();
@@ -51,7 +53,7 @@ extern void _or();
 extern void _not();
 extern void ifcode();
 extern void whilecode();
-// fin practica 5
+// fin practica 4
 
 void init();
 void initcode();

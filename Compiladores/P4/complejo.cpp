@@ -48,6 +48,14 @@ double Complejo::magnitud() {
 	return sqrt(real*real + im*im);
 }
 
+bool Complejo::mag_eq(Complejo z) {
+	return magnitud() == z.magnitud();
+}
+
+bool Complejo::mag_ne(Complejo z) {
+	return magnitud() != z.magnitud();
+}
+
 bool Complejo::operator<(Complejo z) {
 	return (magnitud() < z.magnitud());
 }
@@ -65,10 +73,10 @@ bool Complejo::operator>=(Complejo z) {
 }
 
 bool Complejo::operator==(Complejo z) {
-	return (magnitud() == z.magnitud());
+	return (im == z.getI() && real == z.getR());	
 }
 bool Complejo::operator!=(Complejo z) {
-	return (magnitud() != z.magnitud());
+	return (im != z.getI() || real != z.getR());
 }
 
 bool Complejo::operator||(Complejo z) {
