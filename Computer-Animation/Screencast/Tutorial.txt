@@ -1,0 +1,9 @@
+Search screencast keys blender, download it 
+
+Open preferences -> add-ons
+
+Install the screencast script
+
+Press n
+
+Then search for the screencast display button
