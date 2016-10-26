@@ -1,0 +1,63 @@
+
+newmtl Material.000001
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+d 1
+Ns 1
+map_Kd adult.png
+
+
+newmtl Material.00023c
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+d 1
+Ns 1
+map_Kd whiskers.png
+
+
+newmtl Material.000252
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+d 1
+Ns 1
+map_Kd teeth.png
+
+
+newmtl Material.000272
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+d 1
+Ns 1
+map_Kd teeth.png
+
+
+newmtl Material.00027a
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+d 1
+Ns 1
+map_Kd adult.png
+
+
+newmtl Material.0003c0
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+d 1
+Ns 1
+map_Kd whiskers.png
+
+
+newmtl Material.0003d0
+Ka 1 1 1
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+d 1
+Ns 1
+map_Kd adult.png
+
